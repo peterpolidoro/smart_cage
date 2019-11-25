@@ -1,0 +1,23 @@
+#+TITLE: smart_cage_architecture
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peterpolidoro@gmail.com
+
+* Library Information
+  - Name :: smart_cage_architecture
+  - Version :: 1.0.0
+  - License :: BSD
+  - URL :: https://github.com/janelia-experimental-technology/smart_cage_architecture
+  - Author :: Peter Polidoro
+  - Email :: peterpolidoro@gmail.com
+
+** Description
+
+   Smart cage architecture
+
+* Use
+
+  #+BEGIN_SRC sh
+    sudo apt install graphviz
+    java -jar plantuml.jar smart_cage_architecture_client_server.plantuml
+    java -jar plantuml.jar smart_cage_architecture_ros.plantuml
+  #+END_SRC
