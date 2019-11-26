@@ -1,0 +1,38 @@
+@startuml
+
+node "Cage 0" {
+        node "Tunnel Assembly 0" {
+                node "Tunnel 0" {
+                        node "Phidgets Hub 0" {
+                                [Latch 0]
+                                [Home 0]
+                                [Headbar 0]
+                                [Latch 1]
+                                [Home 1]
+                                [Headbar 1]
+                        }
+                        node "Phidgets Hub 1" {
+                                [Load]
+                                [Release]
+                                [Trigger]
+                        }
+                        [Camera 0]
+                        [Camera 1]
+                }
+                node "Lickport 0" {
+                        node "Phidgets Hub 2" {
+                                [Stepper 0]
+                                [Home 0]
+                                [Stepper 1]
+                                [Home 1]
+                                [Stepper 2]
+                                [Home 2]
+                        }
+                        [Valve 0]
+                        [Valve 1]
+                        [Camera 2]
+                }
+        }
+}
+
+@enduml

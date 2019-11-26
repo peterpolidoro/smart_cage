@@ -18,6 +18,5 @@
 
   #+BEGIN_SRC sh
     sudo apt install graphviz
-    java -jar plantuml.jar smart_cage_architecture_client_server.plantuml
-    java -jar plantuml.jar smart_cage_architecture_ros.plantuml
+    java -jar plantuml.jar smart_cage_architecture.plantuml
   #+END_SRC
