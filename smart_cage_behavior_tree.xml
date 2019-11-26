@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Sequence>
+            <Fallback>
+                <Condition ID="AreLatchesOpen"/>
+                <Action ID="OpenLatches"/>
+            </Fallback>
+            <Condition ID="IsMouseInTunnel"/>
+            <Condition ID="IsHeadbarInPosition"/>
+            <Condition ID="IsLatchModeEnabled"/>
+            <Sequence name="latch_headbar">
+                <Action ID="CloseLatches"/>
+            </Sequence>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Condition ID="AreLatchesOpen"/>
+        <Action ID="CloseLatches"/>
+        <Condition ID="IsHeadbarInPosition"/>
+        <Condition ID="IsLatchModeEnabled"/>
+        <Condition ID="IsMouseInTunnel"/>
+        <Action ID="OpenLatches"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
+
