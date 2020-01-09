@@ -1,0 +1,44 @@
+#+TITLE: SETUP_WINDOWS
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peterpolidoro@gmail.com
+
+* Library Information
+  - Name :: SETUP_WINDOWS
+  - Version :: 1.0.0
+  - License :: BSD
+  - URL :: https://github.com/janelia-experimental-technology/smart_cage
+  - Author :: Peter Polidoro
+  - Email :: peterpolidoro@gmail.com
+
+** Description
+
+   Smart cage Windows setup instructions
+
+* Setup
+
+** Hardware
+
+   Manufacturer: Intel
+   Product code: BOXNUC7i7BNH
+   Regulatory Model: NUC7i7BNH
+
+** Windows
+
+   - In Windows search bar, search for "update"
+   - Click 'Check for updates'
+   - Change Windows update active hours to not include current time
+   - Install all updates
+   - Change Windows update active hours to include any experiment hours
+
+** Matlab
+
+   - Open file explorer
+   - Right-click on 'Network' and 'Map network drive'
+   - Set drive 'S:' to '\\hhmi.org\shares\JFRC\software', uncheck 'Reconnect at
+     sign-in', check 'Connect using different credentials'
+   - Enter your HHMI network credentials
+
+  #+BEGIN_SRC sh
+    sudo apt install graphviz
+    java -jar plantuml.jar smart_cage_architecture.plantuml
+  #+END_SRC

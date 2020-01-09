@@ -1,18 +1,18 @@
-#+TITLE: smart_cage_architecture
+#+TITLE: smart_cage
 #+AUTHOR: Peter Polidoro
 #+EMAIL: peterpolidoro@gmail.com
 
 * Library Information
-  - Name :: smart_cage_architecture
+  - Name :: smart_cage
   - Version :: 1.0.0
   - License :: BSD
-  - URL :: https://github.com/janelia-experimental-technology/smart_cage_architecture
+  - URL :: https://github.com/janelia-experimental-technology/smart_cage
   - Author :: Peter Polidoro
   - Email :: peterpolidoro@gmail.com
 
 ** Description
 
-   Smart cage architecture
+   Smart cage
 
 * Use
 
