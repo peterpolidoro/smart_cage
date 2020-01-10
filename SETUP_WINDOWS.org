@@ -16,29 +16,123 @@
 
 * Setup
 
-** Hardware
+** Host Computer
 
    Manufacturer: Intel
    Product code: BOXNUC7i7BNH
    Regulatory Model: NUC7i7BNH
 
-** Windows
+** Windows 10
 
-   - In Windows search bar, search for "update"
-   - Click 'Check for updates'
-   - Change Windows update active hours to not include current time
-   - Install all updates
-   - Change Windows update active hours to include any experiment hours
+   - Check for new Windows updates and install all
 
-** Matlab
+** Matlab 2019b
 
-   - Open file explorer
-   - Right-click on 'Network' and 'Map network drive'
-   - Set drive 'S:' to '\\hhmi.org\shares\JFRC\software', uncheck 'Reconnect at
-     sign-in', check 'Connect using different credentials'
-   - Enter your HHMI network credentials
+   - Click 'Windows key + r'
+   - \\jfrc-fs03.hhmi.org\software\Matlab\R2019b\Windows
+   - Enter your HHMI network credentials @hhmi.org username and password
+   - Double click setup.exe
+   - Select 'Use File Installation Key' and enter key given by IT
+   - Install into the default location
+   - Select to install Matlab with all toolboxes needed, especially ROS Toolbox
+   - Copy license.dat in \\jfrc-fs03.hhmi.org\software\Matlab\R2019b\ to
+     C:\Documents
+   - Selected copied license.dat to start installation
+   - Navigate to 'Control Panel > Network and Internet > Network Connections'
+   - Click 'Ethernet' click 'Properties' click 'Internet Protocol Version 4'
+     click 'Advanced' click 'DNS tab' click 'Append DNS suffixes'
+   - Add "hhmi.org" to DNS suffixes
 
-  #+BEGIN_SRC sh
-    sudo apt install graphviz
-    java -jar plantuml.jar smart_cage_architecture.plantuml
-  #+END_SRC
+** ROS 2 Bouncy
+
+   https://index.ros.org/doc/ros2/Installation/Crystal/Windows-Install-Binary/
+
+*** Install Chocolatey
+
+    https://chocolatey.org/
+
+*** Install Python
+
+    #+BEGIN_SRC sh
+      choco install -y python --version 3.7
+    #+END_SRC
+
+*** Install OpenSSL Win64 v1.0.2
+
+    https://slproweb.com/products/Win32OpenSSL.html
+
+    - Run the installer with default parameters
+
+    #+BEGIN_SRC sh
+      setx -m OPENSSL_CONF C:\OpenSSL-Win64\bin\openssl.cfg
+    #+END_SRC
+
+    - Add C:\OpenSSL-Win64\bin\ to PATH
+
+*** Install Visual Studio 2017 15.9.18 Free Community Edition
+
+    https://www.techspot.com/downloads/6278-visual-studio.html
+
+    - Select the Desktop development with C++ workflow during the install
+
+*** Install dependencies
+
+**** cmake
+
+     #+BEGIN_SRC sh
+       choco install -y cmake
+     #+END_SRC
+
+**** choco packages
+
+     https://github.com/ros2/choco-packages/releases/tag/2019-10-24
+
+     - Right click on each and save-as in Downloads directory
+       asio.1.12.1.nupkg
+       eigen-3.3.4.nupkg
+       tinyxml-usestl.2.6.2.nupkg
+       tinyxml2.6.0.0.nupkg
+       log4cxx.0.10.0.nupkg
+
+     #+BEGIN_SRC sh
+       choco install -y -s C:\Users\labadmin\Downloads asio eigen tinyxml-usestl tinyxml2 log4cxx
+     #+END_SRC
+
+**** Python packages
+
+     #+BEGIN_SRC sh
+       pythyn -m pip install -U pip
+       python -m pip install -U catkin_pkg empy lark-parser opencv-python pyparsing pyyaml setuptools
+       python -m pip install -U pydot PyQt5
+       python -m pip install -U lxml
+     #+END_SRC
+
+*** ROS 2 Bouncy
+
+    https://github.com/ros2/ros2/releases
+
+    - Hit 'Next' until finding Bouncy Bolson
+    - Download 'ros2-bouncy-windows-AMD64.zip'
+    - Unzip into 'C:\dev\'
+    - Rename 'C:\dev\ros2-windows' to 'C:\dev\ros2_bouncy'
+
+** Try Examples
+
+*** Command Line
+
+    #+BEGIN_SRC sh
+      call C:\dev\ros2_bouncy\local_setup.bat
+      ros2 run demos_nodes_cpp talker
+    #+END_SRC
+
+    #+BEGIN_SRC sh
+      call C:\dev\ros2_bouncy\local_setup.bat
+      ros2 run demos_nodes_cpp listener
+    #+END_SRC
+
+*** Matlab
+
+    #+BEGIN_SRC matlab
+      test1 = ros2node("/test1")
+      ros2 node list
+    #+END_SRC
