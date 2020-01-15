@@ -116,6 +116,17 @@
     - Unzip into 'C:\dev\'
     - Rename 'C:\dev\ros2-windows' to 'C:\dev\ros2_bouncy'
 
+*** Windows Subsystem for Linux
+
+    - Open a PowerShell as Administrator and run:
+
+      #+BEGIN_SRC sh
+        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+      #+END_SRC
+
+    - Restart computer when prompted
+    - Install Ubuntu from the Microsoft Store
+
 ** Try Examples
 
 *** Command Line
