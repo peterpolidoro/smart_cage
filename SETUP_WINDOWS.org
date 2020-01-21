@@ -107,7 +107,7 @@
        python -m pip install -U lxml
      #+END_SRC
 
-*** ROS 2 Bouncy
+*** Install ROS 2 Bouncy
 
     https://github.com/ros2/ros2/releases
 
@@ -116,7 +116,7 @@
     - Unzip into 'C:\dev\'
     - Rename 'C:\dev\ros2-windows' to 'C:\dev\ros2_bouncy'
 
-*** Windows Subsystem for Linux
+*** Install Windows Subsystem for Linux
 
     - Open a PowerShell as Administrator and run:
 
@@ -126,6 +126,14 @@
 
     - Restart computer when prompted
     - Install Ubuntu from the Microsoft Store
+
+*** Install Phidgets Drivers
+
+    https://www.phidgets.com/docs/OS_-_Windows
+
+    - Click on '64-bit Installer Download'
+    - Run the downloaded executable
+    - Accept license agreement
 
 ** Try Examples
 
