@@ -1,0 +1,8 @@
+* Smart Cage Software Proposal
+
+** Architecture
+
+   - test
+
+| task | hours |
+|      |       |
