@@ -20,8 +20,32 @@
    for head-fixing the mouse. The task module has sensors for collecting data
    and actuators for interacting with the mouse.
 
-   A motorized lickport is an example of a task module used for dispensing water
-   to the mouse at various positions and sensing mouse licks.
+   A SmartCage runs a course of training or experiments lasting approximately
+   one month. A course is a series of sessions, one session per day. A session
+   is a series of trials.
+
+** Details
+
+   The tunnel module contains two latches at the end of the tunnel farthest from
+   the cage, one on the mouse's left side when facing out of the tunnel and the
+   other on the right side. Each latch has a home switch, which is triggered
+   when the latch is fully open, and a headbar switch, which is triggered when
+   the mouse presses its headbar into it. A sensor on the floor of the tunnel
+   measures the force the mouse applies to the floor when it presses down upon
+   it. The tunnel module also contains a digital output for communicating with
+   other electronic hardware in the system and a digital input which can be
+   connected to an emergency stop switch.
+
+   The first task module to be developed is a motorized lickport used for
+   dispensing water to the mouse at various positions and for sensing mouse
+   licks. The lickport contains three motors, each with its own home switch, for
+   moving the lickport in three orthogonal directions. The lickport module may
+   contain two lickports, each with a solenoid valve for dispensing water, and a
+   sensor for detecting licks.
+
+   Each SmartCage contains three cameras, one viewing the mouse from the front
+   when it is latched in the tunnel, one viewing the side, and the third viewing
+   the top.
 
    A SmartCage runs a course of training or experiments lasting approximately
    one month. Each SmartCage contains a single mouse and only that mouse is in
@@ -29,18 +53,42 @@
 
    A set of SmartCages may run their courses simultaneously, but independently,
    of one another. Each SmartCage course may start or stop according to its own
-   schedule, which may not necessarily be synchronized with other courses in the
-   set.
+   schedule, which may not necessarily be synchronized with the courses running
+   on other SmartCages in the set.
 
-   Each course consists of a set of sessions. One session runs on each day of
-   the course for part of the day. The researcher sets the time of day to start
-   the session and the maximum duration of the session for that day. The
-   actuators may only be active during the session, but the sensors may be
-   active all day.
+   Each course consists of a set of sessions. One, and only one, session runs on
+   each day of the course for part of the day. The actuators may only be active
+   during the session, but the sensors may be active all day.
 
-   Each session consists of a series of trials. A new trial is started when the
-   mouse enters the tunnel from the cage and triggers one or both of the headbar
-   sensors, depending on the researcher setting, at the end of the tunnel.
+   Each session consists of a series of trials. The researcher sets the time of
+   day to start the session and the maximum duration of the session for that
+   day. A session ends when either the maximum duration of the session is
+   exceeded or the maximum number of trials set for the session is exceeded or
+   if the session is aborted in software, whichever comes first.
+
+   A new trial is started when the mouse enters the tunnel from the cage and
+   triggers one or both of the headbar sensors, depending on the researcher
+   setting, at the end of the tunnel. When a new trial is started, the digital
+   output signals a square wave until the trial ends. When a session or trial is
+   not active, the digital output line will remain low.
+
+   The tunnel module may be in one of two modes, latch mode true and latch mode
+   false. When the latch mode is true, the start of the trial causes the latches
+   to close and remain closed until the end of the trial. When latch mode is
+   false, the latches never close. The latch mode is either true or false for
+   the entire session. The latch mode will be false for some set number of
+   sessions at the beginning of a course. After that number of sessions has been
+   exceeded, all remaining sessions will have latch mode set to true until the
+   end of the course.
+
+   When the latch mode is false, the trial ends as soon as both headbar sensors
+   are unpressed. The digital output will be active during the trial. The floor
+   sensor measurements and the abort signals, from either a software command or an
+   emergency stop switch press, will all be ignored.
+
+   When the latch mode is true, the trial ends when either the latch duration is
+   exceeded, when the floor sensor threshold is exceeded, or if the trial is
+   aborted from either a software command or an emergency stop switch press.
 
 ** Svoboda Lab Software Request
 
