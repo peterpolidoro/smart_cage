@@ -2,14 +2,27 @@
 
 ** Description
 
+   The SmartCage allows mice to perform voluntary head-fixations in their home
+   cage to facilitate behavior training and experiments without human
+   supervision.
+
+** Overview
+
+   A researcher coordinates a set of SmartCages and mice, setting up behavior
+   training or experiments that will run automatically and independently on each
+   SmartCage. The researcher may monitor the set of SmartCages remotely or
+   in-person and intervene if needed, but direct supervision is not necessary
+   for operation.
+
    Each SmartCage contains a mouse with a headbar, a tunnel module with latches
-   and sensors, and a lickport module for dispensing water at different
-   positions and sensing licks.
+   and sensors, and training or experiment modules for interacting with and
+   collecting data from the mouse. For example, a motorized lickport module may
+   be used for dispensing water at different positions and sensing licks.
 
    A SmartCage runs a training period lasting approximately one month. One
    training session runs each day of the training period for part of the day.
 
-** Lab Request
+** Svoboda Lab Request
 
 *** Matlab Bpod
 

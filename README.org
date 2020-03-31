@@ -11,12 +11,3 @@
   - Email :: peterpolidoro@gmail.com
 
 ** Description
-
-   Smart cage
-
-* Use
-
-  #+BEGIN_SRC sh
-    sudo apt install graphviz
-    java -jar plantuml.jar smart_cage_architecture.plantuml
-  #+END_SRC
