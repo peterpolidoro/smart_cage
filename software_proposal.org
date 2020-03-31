@@ -1,28 +1,48 @@
-* Smart Cage Software Proposal
+* SmartCage Software Proposal
 
 ** Description
 
-   The SmartCage allows mice to perform voluntary head-fixations in their home
-   cage to facilitate behavior training and experiments without human
+   The SmartCage system allows mice to perform voluntary head-fixations in their
+   home cages to facilitate behavior training and experiments without human
    supervision.
 
 ** Overview
 
    A researcher coordinates a set of SmartCages and mice, setting up behavior
-   training or experiments that will run automatically and independently on each
-   SmartCage. The researcher may monitor the set of SmartCages remotely or
+   training or experiments which will run automatically and independently on
+   each SmartCage. The researcher may monitor the set of SmartCages remotely or
    in-person and intervene if needed, but direct supervision is not necessary
    for operation.
 
-   Each SmartCage contains a mouse with a headbar, a tunnel module with latches
-   and sensors, and training or experiment modules for interacting with and
-   collecting data from the mouse. For example, a motorized lickport module may
-   be used for dispensing water at different positions and sensing licks.
+   Each SmartCage contains a mouse with a headbar and consists of a typical
+   mouse cage with a tunnel module and task module attached. The tunnel module
+   has sensors for detecting the mouse position and motion and motorized latches
+   for head-fixing the mouse. The task module has sensors for collecting data
+   and actuators for interacting with the mouse.
 
-   A SmartCage runs a training period lasting approximately one month. One
-   training session runs each day of the training period for part of the day.
+   A motorized lickport is an example of a task module used for dispensing water
+   to the mouse at various positions and sensing mouse licks.
 
-** Svoboda Lab Request
+   A SmartCage runs a course of training or experiments lasting approximately
+   one month. Each SmartCage contains a single mouse and only that mouse is in
+   the cage for the entire course.
+
+   A set of SmartCages may run their courses simultaneously, but independently,
+   of one another. Each SmartCage course may start or stop according to its own
+   schedule, which may not necessarily be synchronized with other courses in the
+   set.
+
+   Each course consists of a set of sessions. One session runs on each day of
+   the course for part of the day. The researcher sets the time of day to start
+   the session and the maximum duration of the session for that day. The
+   actuators may only be active during the session, but the sensors may be
+   active all day.
+
+   Each session consists of a series of trials. A new trial is started when the
+   mouse enters the tunnel from the cage and triggers one or both of the headbar
+   sensors, depending on the researcher setting, at the end of the tunnel.
+
+** Svoboda Lab Software Request
 
 *** Matlab Bpod
 
