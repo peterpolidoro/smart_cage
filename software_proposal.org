@@ -8,7 +8,7 @@
 
 ** Overview
 
-   A researcher coordinates a set of SmartCages and mice, setting up behavior
+   A researcher manages a set of SmartCages and mice, setting up behavior
    training or experiments which will run automatically and independently on
    each SmartCage. The researcher may monitor the set of SmartCages remotely or
    in-person and intervene if needed, but direct supervision is not necessary
@@ -21,74 +21,13 @@
    and actuators for interacting with the mouse.
 
    A SmartCage runs a course of training or experiments lasting approximately
-   one month. A course is a series of sessions, one session per day. A session
-   is a series of trials.
+   one month. A course is a series of sessions, one session per day, each
+   lasting about half a day. A session is a series of trials, each trial lasting
+   somewhere between half a minute to half an hour.
 
-** Details
-
-   The tunnel module contains two latches at the end of the tunnel farthest from
-   the cage, one on the mouse's left side when facing out of the tunnel and the
-   other on the right side. Each latch has a home switch, which is triggered
-   when the latch is fully open, and a headbar switch, which is triggered when
-   the mouse presses its headbar into it. A sensor on the floor of the tunnel
-   measures the force the mouse applies to the floor when it presses down upon
-   it. The tunnel module also contains a digital output for communicating with
-   other electronic hardware in the system and a digital input which can be
-   connected to an emergency stop switch.
-
-   The first task module to be developed is a motorized lickport used for
-   dispensing water to the mouse at various positions and for sensing mouse
-   licks. The lickport contains three motors, each with its own home switch, for
-   moving the lickport in three orthogonal directions. The lickport module may
-   contain two lickports, each with a solenoid valve for dispensing water, and a
-   sensor for detecting licks.
-
-   Each SmartCage contains three cameras, one viewing the mouse from the front
-   when it is latched in the tunnel, one viewing the side, and the third viewing
-   the top.
-
-   A SmartCage runs a course of training or experiments lasting approximately
-   one month. Each SmartCage contains a single mouse and only that mouse is in
-   the cage for the entire course.
-
-   A set of SmartCages may run their courses simultaneously, but independently,
-   of one another. Each SmartCage course may start or stop according to its own
-   schedule, which may not necessarily be synchronized with the courses running
-   on other SmartCages in the set.
-
-   Each course consists of a set of sessions. One, and only one, session runs on
-   each day of the course for part of the day. The actuators may only be active
-   during the session, but the sensors may be active all day.
-
-   Each session consists of a series of trials. The researcher sets the time of
-   day to start the session and the maximum duration of the session for that
-   day. A session ends when either the maximum duration of the session is
-   exceeded or the maximum number of trials set for the session is exceeded or
-   if the session is aborted in software, whichever comes first.
-
-   A new trial is started when the mouse enters the tunnel from the cage and
-   triggers one or both of the headbar sensors, depending on the researcher
-   setting, at the end of the tunnel. When a new trial is started, the digital
-   output signals a square wave until the trial ends. When a session or trial is
-   not active, the digital output line will remain low.
-
-   The tunnel module may be in one of two modes, latch mode true and latch mode
-   false. When the latch mode is true, the start of the trial causes the latches
-   to close and remain closed until the end of the trial. When latch mode is
-   false, the latches never close. The latch mode is either true or false for
-   the entire session. The latch mode will be false for some set number of
-   sessions at the beginning of a course. After that number of sessions has been
-   exceeded, all remaining sessions will have latch mode set to true until the
-   end of the course.
-
-   When the latch mode is false, the trial ends as soon as both headbar sensors
-   are unpressed. The digital output will be active during the trial. The floor
-   sensor measurements and the abort signals, from either a software command or an
-   emergency stop switch press, will all be ignored.
-
-   When the latch mode is true, the trial ends when either the latch duration is
-   exceeded, when the floor sensor threshold is exceeded, or if the trial is
-   aborted from either a software command or an emergency stop switch press.
+   Control and data collection in the SmartCage system is handled by a variety
+   of hardware and software components, communicating with each other to
+   coordinate.
 
 ** Svoboda Lab Software Request
 
@@ -110,6 +49,98 @@
       (e.g. lickport positions, latching) via ROS
     - alarm systems to notify users when either component crashes or mice do not
       peroform well
+
+** Details
+
+   A SmartCage consists of a regular mouse cage with a hole cut into it and a
+   tunnel module attached to it. A variety of task modules may be attached to
+   the tunnel module.
+
+   The tunnel module contains two latches at the end of the tunnel farthest from
+   the cage, one on the mouse's left side when facing out of the tunnel and the
+   other on the right side. Each latch has a home switch, which is triggered
+   when the latch is fully open, and a headbar switch, which is triggered when
+   the mouse presses its headbar into it. A sensor on the floor of the tunnel
+   measures the force the head-fixed mouse applies to the floor when it presses
+   down upon it. The tunnel module also contains a digital output for
+   communicating with other electronic hardware in the system and a digital
+   input which can be connected to an emergency stop switch.
+
+   The first task module to be developed is a motorized lickport used for
+   dispensing water to the mouse at various positions and for sensing mouse
+   licks. The lickport contains three motors, each with its own home switch, for
+   moving the lickport in three orthogonal directions. The lickport module may
+   contain multiple lickports, each with a solenoid valve for dispensing water
+   and a sensor for detecting licks.
+
+   Each SmartCage contains three cameras, one viewing the mouse from the front
+   when it is latched in the tunnel, one viewing the side, and the third viewing
+   the top.
+
+   A SmartCage runs a course of training or experiments lasting approximately
+   one month. Each SmartCage contains a single mouse and only that mouse is in
+   the cage for the entire course.
+
+   A set of SmartCages may run their courses simultaneously, but independently,
+   of one another. Each SmartCage course may start or stop according to its own
+   schedule, which may not necessarily be synchronized with the courses running
+   on other SmartCages in the set.
+
+   Each course consists of a set of sessions. One, and only one, session runs on
+   each day of the course for part of the day. The actuators may only be active
+   during the session, but the sensors may be active all day.
+
+   Each session consists of a series of trials. Each trial may be as short as a
+   few seconds or as long as half an hour or so.
+
+   The researcher sets the time of day to start the session and the maximum
+   duration of the session for that day. A typical session duration might be 12
+   hours. The researcher also sets the maximum number of trials per session, for
+   example 800 trials per session.
+
+   A session ends when either the maximum duration of the session is
+   exceeded or the maximum number of trials set for the session is exceeded or
+   if the session is aborted in software, whichever comes first.
+
+   A new trial is started when the mouse enters the tunnel from the cage and
+   triggers one or both of the headbar sensors, depending on the researcher
+   setting, at the end of the tunnel. When a new trial is started, the digital
+   output signals a square wave until the trial ends. When a session or trial is
+   not active, the digital output line will remain low.
+
+   The tunnel module may be in one of two modes, latch mode true and latch mode
+   false. When the latch mode is true, the start of the trial causes the latches
+   to close and remain closed until the end of the trial. When latch mode is
+   false, the latches never close.
+
+   The latch mode will be specified before a session starts, but the latch mode
+   may be changed by a software command while the session is running. Changing
+   the latch mode will take effect at the start of the next trial in the
+   session.
+
+   The latch mode will typically be false for some number of sessions at the
+   beginning of a course. After that number of sessions has been exceeded, the
+   remaining sessions will typically have latch mode set to true until the end
+   of the course.
+
+   When the latch mode is false, the trial ends as soon as both headbar sensors
+   are unpressed. The digital output will be active during the trial. The floor
+   sensor measurements and the abort signals, from either a software command or
+   an emergency stop switch press, will all be ignored. A new trial may begin
+   immediately after the end of a previous trial when one or both of the headbar
+   sensors are pressed, depending on the researcher setting.
+
+   When the latch mode is true, the trial ends when either the latch duration is
+   exceeded, when the floor sensor threshold is exceeded, or if the trial is
+   aborted from either a software command or an emergency stop switch press.
+
+   When a trial is aborted by a software command it means the mouse was
+   exhibiting bad performance during the trial.
+
+   The tunnel floor sensor threshold will be specified before a session starts,
+   but the threshold may be changed by a software command while the session is
+   running. Changing the threshold value will take effect immediately, even if
+   it occurs in the middle of a trial.
 
 ** Architecture
 
