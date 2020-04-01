@@ -90,7 +90,8 @@
    Each course consists of a set of sessions. One, and only one, session runs on
    each day of the course for part of the day. The cameras and lickport motors
    may be active all day, but the latches and other sensors may only be active
-   during the session.
+   during the session. If a session is aborted before it is scheduled to end it
+   may be restarted.
 
    Each session consists of a series of trials. Each trial may be as short as a
    few seconds or as long as half an hour or so.
@@ -181,11 +182,24 @@
    the alarm system, triggering an alarm and supplying a message to be included
    in the alarm email.
 
+   A GUI will display must be able to communicate with all SmartCages in a
+   researcher's set and must be accessable remotely. The GUI will display
+   information, but will not be able to send commands to the SmartCages. The GUI
+   may need information from external software, for example the amount of water
+   that the mouse has consumed, so that information must be communicated
+   regularly to the GUI in order for it to be displayed.
+
 ** Operation
 
    When first powering up the SmartCage, the software will start running and
    wait idly for messages from external software. All messages from external
-   software will be ignored except for a message to start a course.
+   software to the SmartCage will be ignored except for a message to start a
+   course.
+
+   A GUI will be running independently from all SmartCages in the researcher's
+   set. It may receive messages at any time from any of the SmartCages and from
+   external software. It must be accessible remotely at any time, so most likely
+   will be a webpage hosted on a webpage server.
 
    Starting a course requires sending a message to a particular SmartCage,
    specifying the name of the mouse that will be living in the cage for the
@@ -199,12 +213,15 @@
    3-axis home position, and enabled to move when the lickport receives software
    commands.
 
-   A directory is created to save data collected during the course. The top level
-   directory will be the same name as the mouse, so weird characters should not
-   be used in the mouse name. Within the mouse directory, the next level
-   directory will be the number of courses that mouse has completed, starting
-   at 0. Information about the course will be saved into a text file in the
-   course directory.
+   A directory is created to save data collected during the course. The top
+   level directory will be the same name as the mouse, so weird characters
+   should not be used in the mouse name. Within the mouse directory, the next
+   level directory will be the number of courses that mouse has completed,
+   starting at 0. Information about the course will be saved into a text file in
+   the course directory.
+
+   A lickport text file in the course directory will be used to store lickport
+   positions commanded during the course along with date and timestamps.
 
    Within the course directory, another directory will be created to save the
    camera images. Within the images directory, one directory will be created for
@@ -236,10 +253,11 @@
    at 0. Information about the session will be saved into a text file in the
    session directory.
 
-   When a session is started, the
-
+   When a session is started, the tunnel headbar switches and tunnel digital
+   output are enabled.
 
 ** Architecture
+
 
 
 
