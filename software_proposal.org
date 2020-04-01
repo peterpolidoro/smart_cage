@@ -96,7 +96,9 @@
    The researcher sets the time of day to start the session and the maximum
    duration of the session for that day. A typical session duration might be 12
    hours. The researcher also sets the maximum number of trials per session, for
-   example 800 trials per session.
+   example 800 trials per session. The trial counter resets to zero at the start
+   of every session and is incremented at the start of every new trial,
+   regardless of whether the previous trial ended successfully or not.
 
    A session ends when either the maximum duration of the session is
    exceeded or the maximum number of trials set for the session is exceeded or
@@ -128,11 +130,14 @@
    sensor measurements and the abort signals, from either a software command or
    an emergency stop switch press, will all be ignored. A new trial may begin
    immediately after the end of a previous trial when one or both of the headbar
-   sensors are pressed, depending on the researcher setting.
+   sensors are pressed, depending on the researcher setting. All trials will be
+   considered successful.
 
    When the latch mode is true, the trial ends when either the latch duration is
    exceeded, when the floor sensor threshold is exceeded, or if the trial is
-   aborted from either a software command or an emergency stop switch press.
+   aborted from either a software command or an emergency stop switch press. A
+   trial is considered successful if the latch duration is exceeded and
+   considered a failure otherwise.
 
    When a trial is aborted by a software command it means the mouse was
    exhibiting bad performance during the trial.
@@ -142,13 +147,59 @@
    running. Changing the threshold value will take effect immediately, even if
    it occurs in the middle of a trial.
 
+   The latch duration will be taken from an array of latch durations specified
+   when starting a course. The first time the latch mode is set to true, the
+   latch duration used for the next trial will be the first element in the latch
+   duration array. If the trial is considered a success, then the next latch
+   duration will be set to the next value in the latch duration array. If there
+   are no more elements in the latch duration array, the last value of the array
+   will be used for all following trials in the course. If the trial is
+   considered a failure, then the latch duration from the failed trial will be
+   used again and the latch duration array index will not be incremented.
+
+   The lickport 3-axis position may be changed at any time during a session with
+   a software command. When a session is not running, the lickport will be
+   disabled and software commands will be ignored until a new session starts.
+
+   A watchdog will be used to detect external software crashes. Software
+   messages must be sent regularly to the watchdog. If the watchdog does not
+   receive a message within a period of time set by the researcher, then the
+   watchdog assumes the external software has crashed or become unresponsive.
+
+   An alarm system will trigger an alarm when it detects a problem. Triggering
+   an alarm opens the latches, if possible, ends the current trial and session,
+   if they are running, and sends an email to the researcher.
+
+   An alarm will be triggered if the watchdog detects an external software
+   crash. An alarm will be triggered at the end of a session if no trials were
+   started in the entire session. An alarm will be triggered if both headbar
+   sensors become unpressed while the latches are closed. Alarms may be
+   triggered by external software commands. For example, if external software
+   determines that the mouse has bad performance, then it may send a command to
+   the alarm system, triggering an alarm and supplying a message to be included
+   in the alarm email.
+
+** Operation
+
+   When first powering up the SmartCage, the software will start running and
+   wait idly for messages from external software. All messages from external
+   software will be ignored except for a message to start a course.
+
+   Starting a course requires sending a message to a particular SmartCage,
+   specifying the name of the mouse that will be living in the cage for the
+   duration of the course, and the array of latch durations with units of
+   seconds.
+
+   When a course is started, the latches are homed and left open, the digital
+   output is set low, and the lickport motors are homed and left at the 3-axis
+   home position.
+
+
 ** Architecture
 
 
 
 ** Time Estimates
-
-   - test
 
 | task | hours |
 |      |       |
