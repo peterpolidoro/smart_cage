@@ -22,8 +22,8 @@
 
    A SmartCage runs a course of training or experiments lasting approximately
    one month. A course is a series of sessions, one session per day, each
-   lasting about half a day. A session is a series of trials, each trial lasting
-   somewhere between half a minute to half an hour.
+   lasting about half a day. A session is a series of trials, each trial
+   typically lasting somewhere between half a minute to half an hour.
 
    Control and data collection in the SmartCage system is handled by a variety
    of hardware and software components, communicating with each other to
@@ -48,7 +48,7 @@
     - provide example code showing the PyBpod scripts can control the SmartCage
       (e.g. lickport positions, latching) via ROS
     - alarm systems to notify users when either component crashes or mice do not
-      peroform well
+      perform well
 
 ** Details
 
@@ -73,13 +73,14 @@
    contain multiple lickports, each with a solenoid valve for dispensing water
    and a sensor for detecting licks.
 
-   Each SmartCage contains three cameras, one viewing the mouse from the front
-   when it is latched in the tunnel, one viewing the side, and the third viewing
-   the top.
-
    A SmartCage runs a course of training or experiments lasting approximately
    one month. Each SmartCage contains a single mouse and only that mouse is in
    the cage for the entire course.
+
+   Each SmartCage contains three cameras, one viewing the mouse from the front
+   when it is latched in the tunnel, one viewing the side, and the third viewing
+   the top. Images are both streamed and saved from the cameras all day and
+   night during the entire course.
 
    A set of SmartCages may run their courses simultaneously, but independently,
    of one another. Each SmartCage course may start or stop according to its own
@@ -87,8 +88,9 @@
    on other SmartCages in the set.
 
    Each course consists of a set of sessions. One, and only one, session runs on
-   each day of the course for part of the day. The actuators may only be active
-   during the session, but the sensors may be active all day.
+   each day of the course for part of the day. The cameras and lickport motors
+   may be active all day, but the latches and other sensors may only be active
+   during the session.
 
    Each session consists of a series of trials. Each trial may be as short as a
    few seconds or as long as half an hour or so.
@@ -157,9 +159,9 @@
    considered a failure, then the latch duration from the failed trial will be
    used again and the latch duration array index will not be incremented.
 
-   The lickport 3-axis position may be changed at any time during a session with
-   a software command. When a session is not running, the lickport will be
-   disabled and software commands will be ignored until a new session starts.
+   The lickport 3-axis position may be changed at any time during a course with
+   a software command. When a course is not running, the lickport will be
+   disabled and software commands will be ignored until a new course starts.
 
    A watchdog will be used to detect external software crashes. Software
    messages must be sent regularly to the watchdog. If the watchdog does not
@@ -187,12 +189,54 @@
 
    Starting a course requires sending a message to a particular SmartCage,
    specifying the name of the mouse that will be living in the cage for the
-   duration of the course, and the array of latch durations with units of
-   seconds.
+   duration of the course, the array of latch durations with units of seconds,
+   the width of the camera images, the height of the camera images, and the
+   framerate of cameras. All cameras will have the same width, height, and
+   framerate.
 
-   When a course is started, the latches are homed and left open, the digital
-   output is set low, and the lickport motors are homed and left at the 3-axis
-   home position.
+   When a course is started, the latches are homed and left open, but disabled,
+   the digital output is set low, and the lickport motors are homed, left at the
+   3-axis home position, and enabled to move when the lickport receives software
+   commands.
+
+   A directory is created to save data collected during the course. The top level
+   directory will be the same name as the mouse, so weird characters should not
+   be used in the mouse name. Within the mouse directory, the next level
+   directory will be the number of courses that mouse has completed, starting
+   at 0. Information about the course will be saved into a text file in the
+   course directory.
+
+   Within the course directory, another directory will be created to save the
+   camera images. Within the images directory, one directory will be created for
+   each camera. The software may not be able to differentiate which camera
+   belongs to which view, so the directories will be arbitrarily named. The
+   researcher will then later need to figure out which camera belongs to which
+   view by looking at the images. The software will begin saving images from the
+   cameras as soon as the course is started. Only images that differ
+   significantly from previous images will be saved to reduce disk usage. Date
+   and time stamps will be used to name each image. All messages from external
+   software will be ignored except for a message to create a new session.
+
+   Creating a new session requires sending a message to a particular SmartCage
+   that is actively running a course, specifying the session start date and time
+   (year, month, day, hour, and minute) and the session duration in hours, the
+   tunnel floor sensor threshold, the latch mode, and whether or not both
+   headbar sensors are required to start a new trial. Sessions should be created
+   with start and end date and times that are in the future. Sessions may be
+   created that have start date and times that are in the past as long as their
+   end date and times are in the future. Sessions with end date and times that
+   are in the past will be ignored. If the session end date and time is in the
+   future and the start date and time is in the past, the session will begin
+   immediately and the maximum session duration will be the end date and time
+   minus the current date and time.
+
+   Sessions are started automatically on their start date and time. When a
+   session starts, a new directory is created in the course directory, named
+   after the number of sessions the mouse has completed in this course, starting
+   at 0. Information about the session will be saved into a text file in the
+   session directory.
+
+   When a session is started, the
 
 
 ** Architecture
