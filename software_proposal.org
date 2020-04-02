@@ -22,12 +22,16 @@
 
    A SmartCage runs a course of training or experiments lasting approximately
    one month. A course is a series of sessions, one session per day, each
-   lasting about half a day. A session is a series of trials, each trial
+   session lasting about half a day. A session is a series of trials, each trial
    typically lasting somewhere between half a minute to half an hour.
 
    Control and data collection in the SmartCage system is handled by a variety
    of hardware and software components, communicating with each other to
-   coordinate.
+   coordinate. Examples of SmartCage system hardware and software components
+   include Linux single board computers running Python, C++, Docker, ROS, and
+   webservers, Phidgets sensor and actuator controllers, Windows computers
+   running Matlab Bpod or MacOS computers running PyBpod rodent behavior
+   measurement and control devices.
 
 ** Svoboda Lab Software Request
 
@@ -63,15 +67,15 @@
    the mouse presses its headbar into it. A sensor on the floor of the tunnel
    measures the force the head-fixed mouse applies to the floor when it presses
    down upon it. The tunnel module also contains a digital output for
-   communicating with other electronic hardware in the system and a digital
-   input which can be connected to an emergency stop switch.
+   communicating with other electronic hardware in the system, such as Bpod, and
+   a digital input which can be connected to an emergency stop switch.
 
-   The first task module to be developed is a motorized lickport used for
-   dispensing water to the mouse at various positions and for sensing mouse
-   licks. The lickport contains three motors, each with its own home switch, for
-   moving the lickport in three orthogonal directions. The lickport module may
-   contain multiple lickports, each with a solenoid valve for dispensing water
-   and a sensor for detecting licks.
+   The first task module to be developed for the Svoboda Lab is a motorized
+   lickport used for dispensing water to the mouse at various positions and for
+   sensing mouse licks. The lickport contains three motors, each with its own
+   home switch, for moving the lickport in three orthogonal directions. The
+   lickport module may contain multiple lickports, each with a solenoid valve
+   for dispensing water and a sensor for detecting licks.
 
    A SmartCage runs a course of training or experiments lasting approximately
    one month. Each SmartCage contains a single mouse and only that mouse is in
@@ -91,7 +95,7 @@
    each day of the course for part of the day. The cameras and lickport motors
    may be active all day, but the latches and other sensors may only be active
    during the session. If a session is aborted before it is scheduled to end it
-   may be restarted.
+   may be restarted if the session end date and time have not passed.
 
    Each session consists of a series of trials. Each trial may be as short as a
    few seconds or as long as half an hour or so.
@@ -110,8 +114,9 @@
    A new trial is started when the mouse enters the tunnel from the cage and
    triggers one or both of the headbar sensors, depending on the researcher
    setting, at the end of the tunnel. When a new trial is started, the digital
-   output signals a square wave until the trial ends. When a session or trial is
-   not active, the digital output line will remain low.
+   output signals a square wave at some acceptable frequency until the trial
+   ends. When a session or trial is not active, the digital output line will
+   remain low.
 
    The tunnel module may be in one of two modes, latch mode true and latch mode
    false. When the latch mode is true, the start of the trial causes the latches
@@ -217,11 +222,13 @@
    level directory will be the same name as the mouse, so weird characters
    should not be used in the mouse name. Within the mouse directory, the next
    level directory will be the number of courses that mouse has completed,
-   starting at 0. Information about the course will be saved into a text file in
-   the course directory.
+   starting at 0. Information about the course will be saved into a text file
+   and current state of the course will be saved in another text file in the
+   course directory.
 
-   A lickport text file in the course directory will be used to store lickport
-   positions commanded during the course along with date and timestamps.
+   A lickport position text file in the course directory will be used to store
+   lickport positions commanded during the course along with date and
+   timestamps.
 
    Within the course directory, another directory will be created to save the
    camera images. Within the images directory, one directory will be created for
@@ -250,18 +257,195 @@
    Sessions are started automatically on their start date and time. When a
    session starts, a new directory is created in the course directory, named
    after the number of sessions the mouse has completed in this course, starting
-   at 0. Information about the session will be saved into a text file in the
+   at 0. Information about the session will be saved into a text file and
+   current state of the session will be saved in another text file in the
    session directory.
 
    When a session is started, the tunnel headbar switches and tunnel digital
-   output are enabled.
+   output are enabled. Data collected during each trial are saved into a data
+   text file in the session directory.
+
+** Data Directory Structure
+
+   Example data directory structure for a mouse named hc34:
+
+   #+BEGIN_VERSE
+smart-cage-data/
+└── hc34
+    └── course-000
+        ├── course-info.json
+        ├── course-state.json
+        ├── images
+        │   ├── camera-000
+        │   │   ├── 2020-04-02-10-20-58-960818.png
+        │   │   └── 2020-04-02-10-20-62-546872.png
+        │   ├── camera-001
+        │   │   ├── 2020-04-02-10-20-58-965781.png
+        │   │   └── 2020-04-02-10-20-62-891765.png
+        │   └── camera-002
+        │       ├── 2020-04-02-10-20-59-178923.png
+        │       └── 2020-04-02-10-20-62-957638.png
+        ├── lickport-positions.txt
+        ├── session-000
+        │   ├── session-info.json
+        │   ├── session-state.json
+        │   └── trial-data.txt
+        └── session-001
+            ├── session-info.json
+            ├── session-state.json
+            └── trial-data.txt
+   #+END_VERSE
+
+** Matlab and Bpod Details
+
+   ???
 
 ** Architecture
 
+   Software in the SmartCage system will be organized as a set of ROS nodes.
 
+   An Ethernet LAN will connect all SmartCages in the set.
 
+   Each SmartCage will contain at least one single board computer running Linux
+   and Docker connected to the Ethernet LAN with a unique IP address.
+
+   Each SmartCage will be assigned a unique number in the set. This number will
+   be used to differentiate SmartCages from one another.
+
+   Separately each SmartCage may also contain a computer running Windows and
+   Matlab to control a Bpod device. The Windows computer may be connected to the
+   Linux single board directly using Ethernet over USB or the Windows computer
+   may be connected to the Ethernet LAN with its own unique IP address.
+
+   A separate Linux single board computer may be connected to the Ethernet LAN
+   to run a node to control the set of SmartCages and host the GUI webserver.
+   This computer may also have multiple Ethernet ports to be used as a router to
+   connected to Ethernet WAN.
+
+*** SmartCageSetController Node
+
+    One instance of this ROS node will run independently from all SmartCages,
+    either on one of the cages or on a separate Linux single board computer
+    connected to the Ethernet LAN.
+
+    This node will collect data from all of the SmartCages and may also allow a
+    research to manage SmartCages within the set.
+
+*** SmartCageSetDataWriter Node
+
+    One instance of this ROS node will run independently from all SmartCages,
+    either on one of the cages or on a separate Linux single board computer
+    connected to the Ethernet LAN.
+
+    This node will manage data from the SmartCages, transferring and backing up
+    data stored locally on each cage to a common network location at regular
+    intervals.
+
+*** GUI Node
+
+    One instance of this ROS node will run independently from all SmartCages,
+    either on one of the cages or on a separate Linux single board computer
+    connected to the Ethernet LAN.
+
+    This node will pass data from the SmartCages to the webserver hosting the
+    GUI webpage.
+
+*** Alarm Node
+
+    One instance of this ROS node will run independently from all SmartCages,
+    either on one of the cages or on a separate Linux single board computer
+    connected to the Ethernet LAN.
+
+    This node will send email to the research when an alarm has been triggered.
+
+*** SmartCageController Node
+
+    One instance of this ROS node will run on each of the SmartCages.
+
+    This node will manage the starting and stopping of courses on the SmartCage
+    and the creation and running of sessions.
+
+    This node will save data about the courses and sessions into the data
+    directories.
+
+*** Camera Node
+
+    One instance of this ROS node will run on each of the SmartCages for each of
+    the SmartCage cameras.
+
+    This node will connect to a camera and stream images from it.
+
+*** CameraDataWriterNode
+
+    One instance of this ROS node will run on each of the SmartCages for each of
+    the SmartCage cameras.
+
+    This node will save images from its associated camera stream into the data
+    directory.
+
+*** Tunnel Node
+
+    One instance of this ROS node will run on each of the SmartCages.
+
+    This node will manage the tunnel and all of its sensors and actuators,
+    including the headbar sensors, the floor force sensor, the emergency stop
+    switch, the latches, and the digital output to the Bpod.
+
+*** TunnelDataWriter Node
+
+    One instance of this ROS node will run on each of the SmartCages.
+
+    This node will save trial data into a text file in the data directory.
+
+*** Lickport Node
+
+    One instance of this ROS node will run on each of the SmartCages.
+
+    This node will manage the lickport linear actuator motors.
+
+*** LickportDataWriter Node
+
+    One instance of this ROS node will run on each of the SmartCages.
+
+    This node will save lickport position data into a text file in the data
+    directory.
+
+*** Matlab Node
+
+    One instance of this ROS node will run on each of the SmartCages that
+    contain a Windows computer running Matlab connected to Bpod.
+
+    This node will allow Matlab to send messages to the other components in the
+    SmartCage system.
+
+*** Watchdog Node
+
+    One instance of this ROS node will run on each of the SmartCages that
+    contain a Windows computer running Matlab connected to Bpod.
+
+    This node will expects regular messages from the Matlab node and will
+    trigger an alarm if it does not receive them.
 
 ** Time Estimates
 
-| task | hours |
-|      |       |
+   | task                            | hours left to complete |
+   |---------------------------------+------------------------|
+   | SmartCageSetController Node     |                        |
+   | SmartCageSetDataWriter Node     |                        |
+   | GUI Node                        |                        |
+   | Alarm Node                      |                        |
+   | SmartCageController Node        |                        |
+   | Camera Node                     |                        |
+   | CameraDataWriterNode            |                        |
+   | Tunnel Node                     |                        |
+   | TunnelDataWriter Node           |                        |
+   | Lickport Node                   |                        |
+   | LickportDataWriter Node         |                        |
+   | Matlab Node                     |                        |
+   | Watchdog Node                   |                        |
+   | Setup Ethernet LAN              |                        |
+   | Create Webpage GUI              |                        |
+   | Docker Images to Manage Updates |                        |
+   | Phidgets Drivers                |                        |
+   | Camera Drivers                  |                        |
+   | Testing                         |                        |
