@@ -428,24 +428,29 @@ smart-cage-data/
 
 ** Time Estimates
 
-   | task                            | hours left to complete |
-   |---------------------------------+------------------------|
-   | SmartCageSetController Node     |                        |
-   | SmartCageSetDataWriter Node     |                        |
-   | GUI Node                        |                        |
-   | Alarm Node                      |                        |
-   | SmartCageController Node        |                        |
-   | Camera Node                     |                        |
-   | CameraDataWriterNode            |                        |
-   | Tunnel Node                     |                        |
-   | TunnelDataWriter Node           |                        |
-   | Lickport Node                   |                        |
-   | LickportDataWriter Node         |                        |
-   | Matlab Node                     |                        |
-   | Watchdog Node                   |                        |
-   | Setup Ethernet LAN              |                        |
-   | Create Webpage GUI              |                        |
-   | Docker Images to Manage Updates |                        |
-   | Phidgets Drivers                |                        |
-   | Camera Drivers                  |                        |
-   | Testing                         |                        |
+   | task                              | weeks left to complete |
+   |-----------------------------------+------------------------|
+   | SmartCageController Node          |                      0 |
+   | Camera Node                       |                      0 |
+   | CameraDataWriterNode              |                      0 |
+   | Tunnel Node                       |                      0 |
+   | TunnelDataWriter Node             |                      0 |
+   | Lickport Node                     |                      0 |
+   | LickportDataWriter Node           |                      0 |
+   | Phidgets Drivers                  |                      0 |
+   | Camera Drivers                    |                      0 |
+   | Linux Single Board Computer Setup |                      0 |
+   | Windows Computer Setup            |                      0 |
+   | SmartCageSetController Node       |                      1 |
+   | SmartCageSetDataWriter Node       |                      1 |
+   | GUI Node                          |                      1 |
+   | Create Webpage GUI                |                      1 |
+   | Alarm Node                        |                      1 |
+   | Matlab Node                       |                      1 |
+   | Watchdog Node                     |                      1 |
+   | Setup Ethernet LAN and Router     |                      1 |
+   | Docker Images to Manage Updates   |                      1 |
+   | Testing                           |                      1 |
+   | Documentation                     |                      1 |
+   | Total                             |                     11 |
+   #+TBLFM: @24$2=vsum(@2..@23)
